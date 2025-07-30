@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muhamad Asyraf Bin Sarkei | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --secondary-color: #1f2937;
+      --background-color: #111827;
+      --text-color: #e5e7eb;
+      --subtle-text-color: #9ca3af;
+      --glow-color: rgba(59, 130, 246, 0.5);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    header {
+      background-color: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #374151;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: var(--primary-color);
+    }
+    .hero {
+      text-align: center;
+      padding: 5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: radial-gradient(ellipse at top, #1e3a8a, var(--background-color) 70%);
+    }
+    .hero img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid var(--primary-color);
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hero img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px var(--glow-color);
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin: 0;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--subtle-text-color);
+      margin-top: 0.5rem;
+      max-width: 600px;
+    }
+    .resume-button {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      margin-top: 2rem;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .resume-button:hover {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+    }
+    section {
+      padding: 4rem 0;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+    }
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: var(--primary-color);
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -2px;
+      box-shadow: 0 0 10px var(--glow-color);
+    }
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: -8px;
+      background-color: var(--primary-color);
+      border: 4px solid var(--background-color);
+      top: 1.5rem;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .timeline-item:nth-child(odd) {
+      left: 0;
+      padding-right: calc(50% + 2rem);
+    }
+    .timeline-item:nth-child(even) {
+      left: 50%;
+      padding-left: 2rem;
+    }
+    .timeline-item:nth-child(even)::after {
+      left: -8px;
+    }
+	.timeline-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--glow-color);
+    }
+    .timeline-content {
+      background-color: var(--secondary-color);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+    .timeline-content ul {
+      text-align: justify;
+    }
+    .card {
+      background-color: var(--secondary-color);
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .project-card {
+      background-color: var(--secondary-color);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card.hidden {
+      display: none;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--glow-color);
+    }
+    .project-card .tags {
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+    .project-card .tag {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .load-more-button {
+      display: block;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      margin: 2rem auto 0;
+      transition: background-color 0.3s, transform 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .load-more-button:hover {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+    }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .skill-category {
+      background-color: var(--secondary-color);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      text-align: center;
+    }
+    .skill-category i {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    .skill-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .skill-pill {
+      background-color: #374151;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+    }
+    .contact {
+      text-align: center;
+    }
+    .contact a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.2rem;
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+    .contact a:hover {
+      color: var(--primary-color);
+    }
+    .contact-form-container {
+      max-width: 600px;
+      margin: 2rem auto 0;
+      padding: 2rem;
+      background-color: var(--secondary-color);
+      border-radius: 0.5rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #374151;
+      border-radius: 0.3rem;
+      background-color: #2d3748;
+      color: var(--text-color);
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px var(--glow-color);
+    }
+    .contact-form button {
+      width: auto;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .testimonial-card {
+      background-color: var(--secondary-color);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--glow-color);
+    }
+    .testimonial-quote {
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .testimonial-author {
+      text-align: right;
+      font-weight: bold;
+    }
+	</style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div>Muhamad Asyraf Bin Sarkei</div>
+        <div class="nav-links">
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#certifications">Certifications</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="social-links-header">
+          <a href="https://github.com/asyrafsarkei" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/muhamad-asyraf-bin-sarkei-9b27981a3/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <!--img src="https://i.imgur.com/placeholder.jpg" alt="Muhamad Asyraf Bin Sarkei"-->
+        <h1>Muhamad Asyraf Bin Sarkei</h1>
+        <p><span id="typed-text"></span></p>
+        <a href="Muhamad_Asyraf_Resume.pdf" download class="resume-button">Download Resume</a>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="experience">
+        <h2>Experience</h2>
+          <div class="timeline">
+              <div class="timeline-content">
+                <h3>Senior Executive • System Analyst</h3>
+                <p><strong>REDtone Telecommunication Sdn. Bhd</strong> | March 2024 - Present</p>
+                <ul>
+                  <li>Led migration of legacy systems to modern platforms, improving performance by targeting ~50% and reducing software defects.</li>
+                  <li>Coordinated cross-functional teams (developers, testers, business units) to deliver projects on schedule.</li>
+                  <li>Gathered and documented requirements by working closely with stakeholders.</li>
+                  <li>Developed JavaScript-based internal ticketing systems to support operational issue tracking.</li>
+                  <li>Conducted SQL data validation and integrity checks across projects.</li>
+                </ul>
+              </div>
+			  <br>
+              <div class="timeline-content">
+                <h3>Associate • Analyst Programmer</h3>
+                <p><strong>Pengurusan Air Selangor Sdn. Bhd</strong> | September 2017 - February 2024</p>
+                <ul>
+                  <li>Oversaw configuration, maintenance, and troubleshooting of internal and outsourced applications on Azure Cloud.</li>
+                  <li>Employed Agile methodologies to coordinate technical initiatives and introduced early DevOps practices.</li>
+                  <li>Led key system upgrades and enhancements to improve service quality, using Kubernetes and Locus.</li>
+                  <li>Gathered business and technical requirements, and acted as an SME in evaluating vendor proposals.</li>
+                </ul>
+              </div>
+        </div>
+      </section>
+      <section id="projects">
+        <h2>Projects</h2>
+        <div class="project-grid">
+          <div class="project-card">
+            <h3>Vendor Registration System (VRS)</h3>
+            <p>A system to streamline vendor onboarding, improve efficiency, and enforce compliance.</p>
+            <div class="tags">
+              <span class="tag">System Analyst</span>
+              <span class="tag">Procurement</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <h3>Wholesale Numbering Portal</h3>
+            <p>A centralized platform for managing user data for the NG999 emergency services initiative.</p>
+            <div class="tags">
+              <span class="tag">API Design</span>
+              <span class="tag">Data Management</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <h3>MERS NG999</h3>
+            <p>Technical lead for Malaysia's next-generation emergency response system.</p>
+            <div class="tags">
+              <span class="tag">System Architecture</span>
+              <span class="tag">Emergency Services</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <h3>Unified Electrical Bill Management (UEBM)</h3>
+            <p>A centralized platform to manage electrical accounts and billing information.</p>
+            <div class="tags">
+              <span class="tag">Billing Systems</span>
+              <span class="tag">Data Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Line of Business Management (LOB) System</h3>
+            <p>A centralized platform to replace error-prone, manual processes for managing staff lists, project data, and financial reporting.</p>
+            <div class="tags">
+              <span class="tag">HR</span>
+              <span class="tag">Finance</span>
+              <span class="tag">Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Migration of Legacy system</h3>
+            <p>A project to migrate the current system from SQL Server 2000 to SQL Server 2022 and enhance the current platform.</p>
+            <div class="tags">
+              <span class="tag">System Migration</span>
+              <span class="tag">SQL Server</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Commission system</h3>
+            <p>A platform to manage each agent's commission.</p>
+            <div class="tags">
+              <span class="tag">Commission Management</span>
+              <span class="tag">Agent Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>MyGovUC 3.0</h3>
+            <p>The largest government IT project in 2024, managing government workers across EDU & GOV domains.</p>
+            <div class="tags">
+              <span class="tag">Government</span>
+              <span class="tag">Cloud</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Customer Management Initiatives (CMI)</h3>
+            <p>An initiative to capture the end user or customer journey on Air Selangor's services.</p>
+            <div class="tags">
+              <span class="tag">Customer Experience</span>
+              <span class="tag">Mobile SuperApp</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Customer Cloud Service (CCS)</h3>
+            <p>An Oracle application cloud used to manage and monitor consumer's account information.</p>
+            <div class="tags">
+              <span class="tag">Oracle</span>
+              <span class="tag">Cloud</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Air Selangor Mobile Application & Portal</h3>
+            <p>An application used by Air Selangor's consumers to keep track of water usage and bill charges.</p>
+            <div class="tags">
+              <span class="tag">Mobile Application</span>
+              <span class="tag">Portal</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>OneScreen</h3>
+            <p>An internal web-based application used to manage and monitor water disruption.</p>
+            <div class="tags">
+              <span class="tag">Internal Tool</span>
+              <span class="tag">Water Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Oracle Utilities Customer Care and Billing (CCB)</h3>
+            <p>An Oracle application used to manage and monitor account consumer's information.</p>
+            <div class="tags">
+              <span class="tag">Oracle</span>
+              <span class="tag">Billing</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>ThirdParty System</h3>
+            <p>An internal web-based application used to manage and monitor claims to third-party entity.</p>
+            <div class="tags">
+              <span class="tag">Internal Tool</span>
+              <span class="tag">Claim Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>iProcurement</h3>
+            <p>An internal web-based application used to manage and monitor claims and expenses of Air Selangor.</p>
+            <div class="tags">
+              <span class="tag">Internal Tool</span>
+              <span class="tag">Procurement</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Salesforce</h3>
+            <p>A software product used by Air Selangor to monitor, manage and populate water complaints.</p>
+            <div class="tags">
+              <span class="tag">Salesforce</span>
+              <span class="tag">CRM</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>WorkPayment System</h3>
+            <p>An internal web-based application to handle claim from repair work.</p>
+            <div class="tags">
+              <span class="tag">Internal Tool</span>
+              <span class="tag">Claim Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>Oracle Utilities Mobile Workforce Management (MWM)</h3>
+            <p>An oracle application which is used to monitor and manage site visit and repair work.</p>
+            <div class="tags">
+              <span class="tag">Oracle</span>
+              <span class="tag">Workforce Management</span>
+            </div>
+          </div>
+          <div class="project-card hidden">
+            <h3>iJob</h3>
+            <p>An internal web-based application which handles pipe repair work & claim.</p>
+            <div class="tags">
+              <span class="tag">Internal Tool</span>
+              <span class="tag">Claim Management</span>
+            </div>
+          </div>
+        </div>
+        <button class="load-more-button" id="load-more">Load More</button>
+      </section>
+
+      <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <i class="fas fa-code"></i>
+            <h3>Languages</h3>
+            <div class="skill-pills">
+              <span class="skill-pill">PHP</span>
+              <span class="skill-pill">C++</span>
+              <span class="skill-pill">Java</span>
+              <span class="skill-pill">JavaScript</span>
+              <span class="skill-pill">CSS</span>
+              <span class="skill-pill">HTML</span>
+              <span class="skill-pill">AJAX</span>
+              <span class="skill-pill">Python</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <i class="fas fa-database"></i>
+            <h3>Databases</h3>
+            <div class="skill-pills">
+              <span class="skill-pill">MySQL</span>
+              <span class="skill-pill">MySQLi</span>
+              <span class="skill-pill">Oracle Database</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <i class="fas fa-tools"></i>
+            <h3>Tools & Software</h3>
+            <div class="skill-pills">
+              <span class="skill-pill">JIRA</span>
+              <span class="skill-pill">Confluence</span>
+              <span class="skill-pill">Git</span>
+              <span class="skill-pill">Docker</span>
+              <span class="skill-pill">Kubernetes</span>
+              <span class="skill-pill">Gemini CLI</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="education">
+        <h2>Education</h2>
+        <div class="experience-card">
+          <div class="experience-header">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+              <h3>Bachelor of Science (Hons) in Information Technology</h3>
+              <p><strong>Universiti Teknologi Mara Arau, Perlis</strong> | Graduated: April 2018</p>
+            </div>
+          </div>
+        </div>
+        <div class="experience-card">
+          <div class="experience-header">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+              <h3>Matriculation in Science Computer (Physics)</h3>
+              <p><strong>Collage Matriculation Selangor, Selangor</strong> | Graduated: September 2011</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="certifications">
+        <h2>Certifications & Training</h2>
+        <div class="experience-card">
+          <div class="experience-body">
+            <ul>
+              <li>Certified as Professional Scrum Master (PSM1) by Scrum.org (May 2025)</li>
+              <li>Completed The Project Management Course: Beginner to PROject Manager on Udemy (July 2025)</li>
+              <li>Attended Assessment Capability Maturity Model Integration (CMMI) Level 3 as Project Manager for REDtone Engineering & Network Sdn Bhd (May 2025)</li>
+              <li>Completed Jira Agile Project Management for Beginners-Bonus on Udemy (April 2025)</li>
+              <li>Attended Assessment Capability Maturity Model Integration (CMMI) Level 3 as Configuration Manager for REDtone Telecommunication Sdn Bhd (April 2025)</li>
+              <li>Earned JIRA End User issued by Iverson Associates (Jan 2024)</li>
+              <li>Attended Course Sport Science and Technical of Taekwondo, Putrajaya (2023)</li>
+              <li>Attended Oracle Field Service Cloud (OFSC) Training (2022)</li>
+              <li>Attended Oracle Integration Cloud (OIC) Training (2022)</li>
+              <li>Attended DevOps Engineer Training and Assessment for Beginner (2021)</li>
+              <li>Attended workshop, The Assessment of Personal Attributes Workshop, Perlis (2014)</li>
+              <li>Received National Co-Curriculum Award, Kelantan (2010)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <h2>Contact</h2>
+        <p>
+          <a href="mailto:muhamadasyraf.sarkei@gmail.com"><i class="fas fa-envelope"></i> muhamadasyraf.sarkei@gmail.com</a>
+        </p>
+        <p>
+          <a href="tel:+60124152996"><i class="fas fa-phone"></i> +6012-4152996</a>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  
+
+  <footer>
+    <div class="container">
+      <div class="social-links">
+        <a href="https://github.com/asyrafsarkei" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/muhamad-asyraf-bin-sarkei-9b27981a3/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+      </div>
+      <p>&copy; 2025 Muhamad Asyraf Bin Sarkei. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <a href="#" id="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Intersection Observer for revealing sections
+      const sections = document.querySelectorAll('section');
+      if (sections.length > 0) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+        sections.forEach(section => {
+          observer.observe(section);
+        });
+      }
+
+      // Back to top button
+      const backToTopButton = document.getElementById('back-to-top');
+      if (backToTopButton) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            backToTopButton.classList.add('visible');
+          } else {
+            backToTopButton.classList.remove('visible');
+          }
+        });
+      }
+
+      // Load more projects button
+      const loadMoreButton = document.getElementById('load-more');
+      const hiddenProjects = document.querySelectorAll('.project-card.hidden');
+      if (loadMoreButton && hiddenProjects.length > 0) {
+        loadMoreButton.addEventListener('click', () => {
+          hiddenProjects.forEach(project => {
+            project.classList.remove('hidden');
+          });
+          loadMoreButton.style.display = 'none';
+        });
+      }
+
+      // Typed.js animation
+      const typedElement = document.getElementById('typed-text');
+      if (typedElement) {
+        new Typed('#typed-text', {
+          strings: ["Technical Lead", "Business Systems Analyst", "Developer" , "Scrum Master"],
+          typeSpeed: 50,
+          backSpeed: 50,
+          loop: true
+        });
+      }
+
+      // Theme Toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('light-theme');
+          themeToggle.innerHTML = document.body.classList.contains('light-theme') 
+            ? '<i class="fas fa-moon"></i>' 
+            : '<i class="fas fa-sun"></i>';
+        });
+      }
+
+      // Mobile Menu Toggle
+      const mobileMenu = document.getElementById('mobile-menu');
+      const navLinks = document.querySelector('.nav-links');
+      if (mobileMenu && navLinks) {
+        mobileMenu.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
+
