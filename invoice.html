@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --primary-color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f9; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1fr; gap: 20px; }
+        
+        /* Form Styling */
+        .form-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        input, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        label { font-weight: bold; font-size: 0.8em; text-transform: uppercase; color: #666; }
+        button { cursor: pointer; padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; }
+        .btn-add { background: #28a745; color: white; margin-top: 10px; }
+        .btn-download { background: #007bff; color: white; width: 100%; font-size: 1.1em; margin-top: 20px; }
+
+        /* Preview/Invoice Styling - Optimized for 1 Page */
+        #invoice-preview { 
+            background: white; 
+            padding: 30px; 
+            min-height: 800px; /* Reduced to fit 1 page */
+            color: #000; 
+            font-family: Arial, sans-serif; 
+            line-height: 1.2; 
+            box-sizing: border-box;
+        }
+        .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .inv-logo { max-width: 150px; max-height: 80px; margin-bottom: 10px; object-fit: contain; }
+        .inv-title { text-align: right; }
+        .inv-title h1 { margin: 0; font-size: 24px; }
+        
+        .inv-meta { display: grid; grid-template-columns: 1fr 1fr; margin-top: 10px; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .inv-table th { border-top: 1px solid #000; border-bottom: 1px solid #000; text-align: left; padding: 5px; font-size: 13px; }
+        .inv-table td { padding: 8px 5px; font-size: 13px; vertical-align: top; }
+        
+        .inv-summary { margin-left: auto; width: 300px; margin-top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #eee; }
+        .total-row { font-weight: bold; font-size: 1.1em; border-top: 2px solid #000; margin-top: 5px; }
+
+        .total-in-words { margin-top: 20px; font-weight: bold; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+        .footer-notes { margin-top: 30px; font-size: 11px; }
+        .signature-space { display: flex; justify-content: space-between; margin-top: 60px; text-align: center; }
+        .sig-line { border-top: 1px solid #000; width: 200px; padding-top: 5px; }
+
+        /* PDF Page Break Prevention */
+        @media print {
+            #invoice-preview { height: auto; min-height: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-section">
+        <h3>1. Company & Customer Info</h3>
+        <div class="grid-inputs">
+            <div><label>Logo</label><input type="file" id="fLogo" onchange="loadLogo(event)"></div>
+            <div><label>Company Name</label><input type="text" id="fCoName" oninput="sync()" ></div>
+            <div><label>Company Address</label><textarea id="fCoAddr" oninput="sync()"></textarea></div>
+            <div><label>Company Contact</label><input type="text" id="fCoContact" oninput="sync()" placeholder="Tel / Email"></div>
+            <div><label>Customer Name</label><input type="text" id="fCustName" oninput="sync()" ></div>
+            <div><label>Invoice No</label><input type="text" id="fInvNo" oninput="sync()" ></div>
+            <div><label>Order Date</label><input type="date" id="fOrderDate" oninput="sync()"></div>
+            <div><label>Invoice Date</label><input type="date" id="fInvDate" oninput="sync()"></div>
+            <div><label>Tax (%)</label><input type="number" id="fTaxRate" value="0" oninput="calculateAll()"></div>
+        </div>
+
+        <h3>2. Items</h3>
+        <div id="item-inputs-container">
+            <div class="grid-inputs item-row">
+                <input type="text" placeholder="Description" class="row-desc" oninput="calculateAll()">
+                <input type="number" placeholder="Qty" class="row-qty" oninput="calculateAll()">
+                <input type="number" placeholder="Price" class="row-price" oninput="calculateAll()">
+            </div>
+        </div>
+        <button class="btn-add" onclick="addRow()">+ Add Item</button>
+        <button class="btn-download" onclick="downloadPDF()">Download PDF</button>
+    </div>
+
+    <div id="invoice-preview">
+        <div class="inv-header">
+            <div>
+                <img id="pLogo" class="inv-logo" style="display:none;">
+                <div id="pCoName" style="font-weight:bold; font-size: 18px;"></div>
+                <div id="pCoAddr" style="font-size: 12px; white-space: pre-wrap;">Address...</div>
+                <div id="pCoContact" style="font-size: 12px;">Tel: ...</div>
+            </div>
+            <div class="inv-title">
+                <h1>TAX INVOICE</h1>
+                <div>(CASH SALE)</div>
+                <div style="margin-top:10px;">No. <span id="pInvNo"></span></div>
+            </div>
+        </div>
+
+        <div class="inv-meta">
+            <div>
+                <div id="pCustName" style="font-weight:bold; margin-top:10px;">Customer Name</div>
+            </div>
+            <div style="text-align: right; font-size: 13px;">
+                <div>Order Date : <span id="pOrderDate">-</span></div>
+                <div>Invoice Date : <span id="pInvDateDisplay">-</span></div>
+            </div>
+        </div>
+
+        <table class="inv-table">
+            <thead>
+                <tr>
+                    <th width="5%">No.</th>
+                    <th>Description</th>
+                    <th width="10%">Qty</th>
+                    <th width="15%">U/Price (RM)</th>
+                    <th width="15%">Total (RM)</th>
+                </tr>
+            </thead>
+            <tbody id="pItemsBody"></tbody>
+        </table>
+
+        <div class="inv-summary">
+            <div class="summary-row">
+                <span>Sub Total (Excl. Tax) RM</span>
+                <span id="pSubtotal">0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Tax (<span id="pTaxPercent">0</span>%) RM</span>
+                <span id="pTaxAmount">0.00</span>
+            </div>
+            <div class="summary-row total-row">
+                <span>Total (Incl. Tax) RM</span>
+                <span id="pGrandTotal">0.00</span>
+            </div>
+        </div>
+
+        <div class="total-in-words">
+            RINGGIT MALAYSIA: <span id="pTotalWords">ZERO ONLY</span>
+        </div>
+
+        <div class="footer-notes">
+            <strong>Notes :</strong><br>
+            1. All cheques should be crossed and made payable to <span id="pCoName2" ></span><br>
+            2. Goods sold are neither returnable nor refundable.
+        </div>
+
+        <div class="signature-space">
+            <div class="sig-line">Authorised Signature</div>
+            <div class="sig-line">Received by</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // FIX: Using FileReader to convert image to Base64 so it shows in PDF
+    function loadLogo(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const pLogo = document.getElementById('pLogo');
+                pLogo.src = e.target.result;
+                pLogo.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return "-";
+        const date = new Date(dateString);
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    function sync() {
+        document.getElementById('pCoName').innerText = document.getElementById('fCoName').value;
+        document.getElementById('pCoName2').innerText = document.getElementById('fCoName').value;
+        document.getElementById('pCoAddr').innerText = document.getElementById('fCoAddr').value;
+        document.getElementById('pCoContact').innerText = document.getElementById('fCoContact').value;
+        document.getElementById('pCustName').innerText = document.getElementById('fCustName').value;
+        document.getElementById('pInvNo').innerText = document.getElementById('fInvNo').value;
+
+        const orderDateVal = document.getElementById('fOrderDate').value;
+        const invDateVal = document.getElementById('fInvDate').value;
+        document.getElementById('pOrderDate').innerText = formatDate(orderDateVal);
+        document.getElementById('pInvDateDisplay').innerText = formatDate(invDateVal);
+    }
+
+    function addRow() {
+        const container = document.getElementById('item-inputs-container');
+        const div = document.createElement('div');
+        div.className = 'grid-inputs item-row';
+        div.innerHTML = `
+            <input type="text" placeholder="Description" class="row-desc" oninput="calculateAll()">
+            <input type="number" placeholder="Qty" class="row-qty" oninput="calculateAll()">
+            <input type="number" placeholder="Price" class="row-price" oninput="calculateAll()">
+        `;
+        container.appendChild(div);
+    }
+
+    function calculateAll() {
+        const rows = document.querySelectorAll('.item-row');
+        const tableBody = document.getElementById('pItemsBody');
+        const taxRate = parseFloat(document.getElementById('fTaxRate').value) || 0;
+        
+        tableBody.innerHTML = '';
+        let subtotal = 0;
+
+        rows.forEach((row, index) => {
+            const desc = row.querySelector('.row-desc').value;
+            const qty = parseFloat(row.querySelector('.row-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.row-price').value) || 0;
+            const rowTotal = qty * price;
+            subtotal += rowTotal;
+
+            if(desc || qty || price) {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}.</td>
+                        <td>${desc}</td>
+                        <td>${qty}</td>
+                        <td>${price.toFixed(2)}</td>
+                        <td>${rowTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+        });
+
+        const taxAmount = subtotal * (taxRate / 100);
+        const grandTotal = subtotal + taxAmount;
+
+        document.getElementById('pSubtotal').innerText = subtotal.toFixed(2);
+        document.getElementById('pTaxPercent').innerText = taxRate;
+        document.getElementById('pTaxAmount').innerText = taxAmount.toFixed(2);
+        document.getElementById('pGrandTotal').innerText = grandTotal.toFixed(2);
+        document.getElementById('pTotalWords').innerText = amountToWords(grandTotal);
+    }
+
+    function amountToWords(amount) {
+        if (amount === 0) return "ZERO ONLY";
+        const ones = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE'];
+        const teens = ['TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN'];
+        const tens = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
+
+        function convert(n) {
+            if (n < 10) return ones[n];
+            if (n < 20) return teens[n - 10];
+            if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + ones[n % 10] : "");
+            if (n < 1000) return ones[Math.floor(n / 100)] + " HUNDRED" + (n % 100 !== 0 ? " AND " + convert(n % 100) : "");
+            if (n < 1000000) return convert(Math.floor(n / 1000)) + " THOUSAND" + (n % 1000 !== 0 ? " " + convert(n % 1000) : "");
+            return "";
+        }
+
+        const wholeNumber = Math.floor(amount);
+        const cents = Math.round((amount - wholeNumber) * 100);
+        let result = convert(wholeNumber);
+        if (cents > 0) result += " AND CENTS " + convert(cents);
+        return result + " ONLY";
+    }
+
+    function downloadPDF() {
+        const element = document.getElementById('invoice-preview');
+        // FIX: Ensure the element is not oversized for the PDF format
+        const opt = {
+            margin: 0.3,
+            filename: 'invoice.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+
+    sync();
+</script>
+
+</body>
+</html>
