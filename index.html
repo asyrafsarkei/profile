@@ -319,12 +319,13 @@
       font-weight: bold;
     }
 	.hidden-link {
-	  color: inherit;       /* Makes it the same color as the text around it */
-	  text-decoration: none; /* Removes the underline */
-	  cursor: text;         /* Optional: keeps the cursor looking like text instead of a pointer */
+	  color: var(--background-color);
+	  text-decoration: none;
+	  cursor: default;
 	}
 	.hidden-link:hover {
-	  color: inherit;       /* Keeps it hidden even on hover */
+	  color: var(--background-color);
+  	  cursor: default;
 	}
 	</style>
 </head>
