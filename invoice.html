@@ -48,6 +48,25 @@
         .footer-notes { margin-top: 30px; font-size: 11px; }
         .signature-space { display: flex; justify-content: space-between; margin-top: 60px; text-align: center; }
         .sig-line { border-top: 1px solid #000; width: 200px; padding-top: 5px; }
+        .stamp-box {
+            border: 3px solid #000;
+            padding: 10px;
+            width: fit-content;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+        }
+        #stampCoName {
+            font-size: 1.2rem;
+            border-bottom: 1px solid #000;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+        }
+        #stampRegNo {
+            font-size: 0.9rem;
+        }
 
         /* PDF Page Break Prevention */
         @media print {
@@ -150,6 +169,9 @@
         </div>
 
         <div class="signature-space">
+            <div id="digitalStamp" class="stamp-box">
+                <div id="stampCoName"><span id="pCoName" ></span></div>
+            </div>
             <div class="sig-line">**No Signature required for digital generated.</div>
             <div class="sig-line">Received by</div>
         </div>
@@ -194,6 +216,9 @@
         const invDateVal = document.getElementById('fInvDate').value;
         document.getElementById('pOrderDate').innerText = formatDate(orderDateVal);
         document.getElementById('pInvDateDisplay').innerText = formatDate(invDateVal);
+
+        const coNameInput = document.getElementById('fCoName').value;
+        document.getElementById('stampCoName').innerText = coNameInput || "COMPANY NAME";
     }
 
     function addRow() {
