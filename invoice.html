@@ -23,7 +23,7 @@
         #invoice-preview { 
             background: white; 
             padding: 30px; 
-            min-height: 800px; /* Reduced to fit 1 page */
+            min-height: 800px; 
             color: #000; 
             font-family: Arial, sans-serif; 
             line-height: 1.2; 
@@ -46,29 +46,21 @@
         .total-in-words { margin-top: 20px; font-weight: bold; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
         .footer-notes { margin-top: 30px; font-size: 11px; }
-        .signature-space { display: flex; justify-content: space-between; margin-top: 60px; text-align: center; }
-        .sig-line { border-top: 1px solid #000; width: 200px; padding-top: 5px; }
-        .stamp-box {
-            border: 3px solid #000;
-            padding: 10px;
-            width: fit-content;
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-family: Arial, sans-serif;
-            margin-bottom: 20px;
-        }
-        #stampCoName {
-            font-size: 1.2rem;
-            border-bottom: 1px solid #000;
-            margin-bottom: 5px;
-            padding-bottom: 5px;
-        }
-        #stampRegNo {
-            font-size: 0.9rem;
-        }
+        .signature-space { display: flex; justify-content: space-between; margin-top: 40px; align-items: flex-end; }
+        .sig-line { border-top: 1px solid #000; width: 200px; padding-top: 5px; text-align: center; font-size: 12px;}
 
-        /* PDF Page Break Prevention */
+        /* --- IMPROVED ROUND STAMP STYLING --- */
+        .stamp-container {
+            transform: rotate(-10deg); /* Realistic tilt */
+            opacity: 0.85;
+            margin-bottom: -20px; /* Overlap slightly with signature area */
+        }
+        .stamp-svg {
+            width: 150px;
+            height: 150px;
+        }
+        /* ------------------------------------ */
+
         @media print {
             #invoice-preview { height: auto; min-height: 0; }
         }
@@ -82,6 +74,7 @@
         <div class="grid-inputs">
             <div><label>Logo</label><input type="file" id="fLogo" onchange="loadLogo(event)"></div>
             <div><label>Company Name</label><input type="text" id="fCoName" oninput="sync()" ></div>
+            <div><label>Reg Number (For Stamp)</label><input type="text" id="fRegNo" oninput="sync()" placeholder="e.g. 123456-X"></div>
             <div><label>Pay to Account</label><input type="text" id="fCoAccount" oninput="sync()" ></div>
             <div><label>Company Address</label><textarea id="fCoAddr" oninput="sync()"></textarea></div>
             <div><label>Company Contact</label><input type="text" id="fCoContact" oninput="sync()" placeholder="Tel / Email"></div>
@@ -108,7 +101,7 @@
         <div class="inv-header">
             <div>
                 <img id="pLogo" class="inv-logo" style="display:none;">
-                <div id="pCoName" style="font-weight:bold; font-size: 18px;"></div>
+                <div id="pCoNameDisplay" style="font-weight:bold; font-size: 18px;"></div>
                 <div id="pCoAddr" style="font-size: 12px; white-space: pre-wrap;">Address...</div>
                 <div id="pCoContact" style="font-size: 12px;">Tel: ...</div>
             </div>
@@ -164,14 +157,34 @@
         <div class="footer-notes">
             <strong>Notes :</strong><br>
             1. Cheques can be crossed and made payable to <span id="pCoName2" ></span><br>
-            2. Payment can be pay to <span id="pCoAccount" ></span><br>
+            2. Payment can be pay to <span id="pCoAccountDisplay" ></span><br>
             3. Goods sold are neither returnable nor refundable.<br>
         </div>
 
         <div class="signature-space">
-            <div id="digitalStamp" class="stamp-box">
-                <div id="stampCoName"><span id="pCoName" ></span></div>
+            <div class="stamp-container">
+                <svg viewBox="0 0 200 200" class="stamp-svg">
+                    <defs>
+                        <path id="stampCirclePath" d="M 100, 100 m -70, 0 a 70,70 0 1,1 140,0 a 70,70 0 1,1 -140,0" />
+                    </defs>
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#a30000" stroke-width="3" />
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="#a30000" stroke-width="1.5" />
+                    
+                    <text fill="#a30000" font-family="Arial" font-weight="bold" font-size="16">
+                        <textPath xlink:href="#stampCirclePath" startOffset="50%" text-anchor="middle" id="stampCoNameText">
+                            COMPANY NAME
+                        </textPath>
+                    </text>
+                    
+                    <text x="100" y="100" fill="#a30000" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" id="stampRegNoText">
+                        REG NO.
+                    </text>
+                    <text x="100" y="120" fill="#a30000" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle">
+                        DIGITALLY VERIFIED
+                    </text>
+                </svg>
             </div>
+
             <div class="sig-line">**No Signature required for digital generated.</div>
             <div class="sig-line">Received by</div>
         </div>
@@ -179,7 +192,6 @@
 </div>
 
 <script>
-    // FIX: Using FileReader to convert image to Base64 so it shows in PDF
     function loadLogo(event) {
         const file = event.target.files[0];
         if (file) {
@@ -204,9 +216,14 @@
     }
 
     function sync() {
-        document.getElementById('pCoName').innerText = document.getElementById('fCoName').value;
-        document.getElementById('pCoName2').innerText = document.getElementById('fCoName').value;
-        document.getElementById('pCoAccount').innerText = document.getElementById('fCoAccount').value;
+        const coNameValue = document.getElementById('fCoName').value;
+        const regNoValue = document.getElementById('fRegNo').value;
+        const coAccountValue = document.getElementById('fCoAccount').value;
+
+        // Sync Invoice Header and Notes
+        document.getElementById('pCoNameDisplay').innerText = coNameValue;
+        document.getElementById('pCoName2').innerText = coNameValue;
+        document.getElementById('pCoAccountDisplay').innerText = coAccountValue;
         document.getElementById('pCoAddr').innerText = document.getElementById('fCoAddr').value;
         document.getElementById('pCoContact').innerText = document.getElementById('fCoContact').value;
         document.getElementById('pCustName').innerText = document.getElementById('fCustName').value;
@@ -217,8 +234,9 @@
         document.getElementById('pOrderDate').innerText = formatDate(orderDateVal);
         document.getElementById('pInvDateDisplay').innerText = formatDate(invDateVal);
 
-        const coNameInput = document.getElementById('fCoName').value;
-        document.getElementById('stampCoName').innerText = coNameInput || "COMPANY NAME";
+        // Sync the Round Stamp
+        document.getElementById('stampCoNameText').textContent = coNameValue.toUpperCase() || "COMPANY NAME";
+        document.getElementById('stampRegNoText').textContent = regNoValue || "REG NO.";
     }
 
     function addRow() {
@@ -295,7 +313,6 @@
 
     function downloadPDF() {
         const element = document.getElementById('invoice-preview');
-        // FIX: Ensure the element is not oversized for the PDF format
         const opt = {
             margin: 0.3,
             filename: 'invoice.pdf',
