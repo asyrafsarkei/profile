@@ -46,20 +46,39 @@
         .total-in-words { margin-top: 20px; font-weight: bold; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
         .footer-notes { margin-top: 30px; font-size: 11px; }
-        .signature-space { display: flex; justify-content: space-between; margin-top: 40px; align-items: flex-end; }
-        .sig-line { border-top: 1px solid #000; width: 200px; padding-top: 5px; text-align: center; font-size: 12px;}
+        
+        /* --- UPDATED SIGNATURE COLUMN LAYOUT --- */
+        .signature-space { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 40px; 
+            align-items: flex-end; 
+        }
+        
+        .stamp-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 250px;
+        }
 
-        /* --- IMPROVED ROUND STAMP STYLING --- */
+        .sig-line { 
+            border-top: 1px solid #000; 
+            width: 200px; 
+            padding-top: 5px; 
+            text-align: center; 
+            font-size: 11px;
+        }
+
         .stamp-container {
-            transform: rotate(-10deg); /* Realistic tilt */
+            transform: rotate(-8deg);
             opacity: 0.85;
-            margin-bottom: -20px; /* Overlap slightly with signature area */
+            margin-bottom: 5px;
         }
         .stamp-svg {
-            width: 150px;
-            height: 150px;
+            width: 130px;
+            height: 130px;
         }
-        /* ------------------------------------ */
 
         @media print {
             #invoice-preview { height: auto; min-height: 0; }
@@ -162,30 +181,32 @@
         </div>
 
         <div class="signature-space">
-            <div class="stamp-container">
-                <svg viewBox="0 0 200 200" class="stamp-svg">
-                    <defs>
-                        <path id="stampCirclePath" d="M 100, 100 m -70, 0 a 70,70 0 1,1 140,0 a 70,70 0 1,1 -140,0" />
-                    </defs>
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="#a30000" stroke-width="3" />
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="#a30000" stroke-width="1.5" />
-                    
-                    <text fill="#a30000" font-family="Arial" font-weight="bold" font-size="16">
-                        <textPath xlink:href="#stampCirclePath" startOffset="50%" text-anchor="middle" id="stampCoNameText">
-                            COMPANY NAME
-                        </textPath>
-                    </text>
-                    
-                    <text x="100" y="100" fill="#a30000" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" id="stampRegNoText">
-                        REG NO.
-                    </text>
-                    <text x="100" y="120" fill="#a30000" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle">
-                        DIGITALLY VERIFIED
-                    </text>
-                </svg>
+            <div class="stamp-column">
+                <div class="stamp-container">
+                    <svg viewBox="0 0 200 200" class="stamp-svg">
+                        <defs>
+                            <path id="stampCirclePath" d="M 100, 100 m -70, 0 a 70,70 0 1,1 140,0 a 70,70 0 1,1 -140,0" />
+                        </defs>
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="#a30000" stroke-width="3" />
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#a30000" stroke-width="1.5" />
+                        <text fill="#a30000" font-family="Arial" font-weight="bold" font-size="16">
+                            <textPath xlink:href="#stampCirclePath" startOffset="50%" text-anchor="middle" id="stampCoNameText">
+                                COMPANY NAME
+                            </textPath>
+                        </text>
+                        <text x="100" y="100" fill="#a30000" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" id="stampRegNoText">
+                            REG NO.
+                        </text>
+                        <text x="100" y="120" fill="#a30000" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle">
+                            DIGITALLY VERIFIED
+                        </text>
+                    </svg>
+                </div>
+                <div class="sig-line" style="border-top: none; font-weight: bold;">
+                    **No Signature required for digital generated.
+                </div>
             </div>
 
-            <div class="sig-line">**No Signature required for digital generated.</div>
             <div class="sig-line">Received by</div>
         </div>
     </div>
@@ -220,7 +241,6 @@
         const regNoValue = document.getElementById('fRegNo').value;
         const coAccountValue = document.getElementById('fCoAccount').value;
 
-        // Sync Invoice Header and Notes
         document.getElementById('pCoNameDisplay').innerText = coNameValue;
         document.getElementById('pCoName2').innerText = coNameValue;
         document.getElementById('pCoAccountDisplay').innerText = coAccountValue;
@@ -234,7 +254,6 @@
         document.getElementById('pOrderDate').innerText = formatDate(orderDateVal);
         document.getElementById('pInvDateDisplay').innerText = formatDate(invDateVal);
 
-        // Sync the Round Stamp
         document.getElementById('stampCoNameText').textContent = coNameValue.toUpperCase() || "COMPANY NAME";
         document.getElementById('stampRegNoText').textContent = regNoValue || "REG NO.";
     }
