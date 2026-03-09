@@ -63,6 +63,7 @@
         <div class="grid-inputs">
             <div><label>Logo</label><input type="file" id="fLogo" onchange="loadLogo(event)"></div>
             <div><label>Company Name</label><input type="text" id="fCoName" oninput="sync()" ></div>
+            <div><label>Pay to Account</label><input type="text" id="fCoAccount" oninput="sync()" ></div>
             <div><label>Company Address</label><textarea id="fCoAddr" oninput="sync()"></textarea></div>
             <div><label>Company Contact</label><input type="text" id="fCoContact" oninput="sync()" placeholder="Tel / Email"></div>
             <div><label>Customer Name</label><input type="text" id="fCustName" oninput="sync()" ></div>
@@ -145,10 +146,11 @@
             <strong>Notes :</strong><br>
             1. All cheques should be crossed and made payable to <span id="pCoName2" ></span><br>
             2. Goods sold are neither returnable nor refundable.
+            3. Payment should be pay to <span id="pCoAccount" ></span><br>
         </div>
 
         <div class="signature-space">
-            <div class="sig-line">Authorised Signature</div>
+            <div class="sig-line">**This is digital generate. No Signature required.</div>
             <div class="sig-line">Received by</div>
         </div>
     </div>
@@ -182,6 +184,7 @@
     function sync() {
         document.getElementById('pCoName').innerText = document.getElementById('fCoName').value;
         document.getElementById('pCoName2').innerText = document.getElementById('fCoName').value;
+        document.getElementById('pCoAccount').innerText = document.getElementById('fCoAccount').value;
         document.getElementById('pCoAddr').innerText = document.getElementById('fCoAddr').value;
         document.getElementById('pCoContact').innerText = document.getElementById('fCoContact').value;
         document.getElementById('pCustName').innerText = document.getElementById('fCustName').value;
