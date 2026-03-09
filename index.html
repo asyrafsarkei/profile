@@ -318,6 +318,14 @@
       text-align: right;
       font-weight: bold;
     }
+	.hidden-link {
+	  color: inherit;       /* Makes it the same color as the text around it */
+	  text-decoration: none; /* Removes the underline */
+	  cursor: text;         /* Optional: keeps the cursor looking like text instead of a pointer */
+	}
+	.hidden-link:hover {
+	  color: inherit;       /* Keeps it hidden even on hover */
+	}
 	</style>
 </head>
 <body>
@@ -645,7 +653,7 @@
         <a href="https://github.com/asyrafsarkei" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
         <a href="https://www.linkedin.com/in/muhamad-asyraf-bin-sarkei-79134619b/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
       </div>
-      <p>&copy; 2025 Muhamad Asyraf Bin Sarkei. All Rights Reserved.</p>
+      <p>&copy; 2025 Muhamad Asyraf Bin Sarkei. All Rights Reserved.<a href="invoice.html" class="hidden-link">lucky</a></p>
     </div>
   </footer>
 
