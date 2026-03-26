@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muhamad Asyraf | Terminal_v3.0</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <style>
+    :root {
+      --primary-glow: #00ff41; 
+      --bg-black: #050505;
+      --terminal-text: #00ff41;
+      --secondary-glow: #008f11;
+      --font-mono: 'Courier New', Courier, monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg-black);
+      color: var(--terminal-text);
+      font-family: var(--font-mono);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* CRT Scanline Effect */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 9999;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    header {
+      border-bottom: 2px solid var(--primary-glow);
+      padding: 1rem 0;
+      background: rgba(0, 0, 0, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 0 15px var(--secondary-glow);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .nav-links a {
+      color: var(--terminal-text);
+      text-decoration: none;
+      text-transform: uppercase;
+      margin-left: 15px;
+      font-size: 0.85rem;
+    }
+
+    .nav-links a:hover { text-shadow: 0 0 10px var(--primary-glow); color: #fff; }
+
+    .hero {
+      padding: 100px 0;
+      text-align: center;
+      border-bottom: 1px solid var(--secondary-glow);
+    }
+
+    .hero h1 { font-size: clamp(2rem, 8vw, 3.5rem); text-transform: uppercase; letter-spacing: 5px; margin: 0; }
+
+    .resume-button {
+      display: inline-block;
+      border: 1px solid var(--primary-glow);
+      padding: 10px 25px;
+      color: var(--primary-glow);
+      text-decoration: none;
+      margin-top: 30px;
+      text-transform: uppercase;
+    }
+
+    .resume-button:hover { background: var(--primary-glow); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+
+    section {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 2rem;
+      border: 1px solid var(--secondary-glow);
+      background: rgba(0, 20, 0, 0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
+    }
+
+    section.visible { opacity: 1; transform: translateY(0); }
+
+    h2 { border-left: 5px solid var(--primary-glow); padding-left: 15px; text-transform: uppercase; }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      border: 1px dashed var(--secondary-glow);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .project-card::before {
+      content: "> EXEC_INIT";
+      font-size: 0.6rem;
+      position: absolute;
+      top: -8px;
+      background: var(--bg-black);
+      padding: 0 5px;
+    }
+
+    .project-card.hidden { display: none; }
+
+    .tag { font-size: 0.7rem; border: 1px solid var(--primary-glow); padding: 2px 6px; margin: 5px 5px 0 0; display: inline-block; }
+
+    .skill-pill { display: inline-block; margin: 5px; padding: 5px 10px; background: #003b00; border: 1px solid var(--primary-glow); }
+
+    .cert-list { list-style: none; padding: 0; }
+    .cert-list li { margin-bottom: 10px; padding-left: 20px; position: relative; }
+    .cert-list li::before { content: ">"; position: absolute; left: 0; color: var(--primary-glow); }
+
+    .load-more-button {
+      background: transparent;
+      color: var(--primary-glow);
+      border: 1px solid var(--primary-glow);
+      padding: 10px 20px;
+      cursor: pointer;
+      display: block;
+      margin: 30px auto;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--secondary-glow); font-size: 0.8rem; }
+    
+    .glitch:hover { animation: glitch-anim 0.2s infinite; }
+    @keyframes glitch-anim {
+      0% { transform: translate(0); }
+      25% { transform: translate(-2px, 2px); }
+      50% { transform: translate(2px, -2px); }
+      75% { transform: translate(-1px, -1px); }
+      100% { transform: translate(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="glitch">ASYRAF_BIN_SARKEI_v3.0</div>
+      <div class="nav-links">
+        <a href="#experience">/EXP</a>
+        <a href="#projects">/WORK</a>
+        <a href="#skills">/TECH</a>
+        <a href="#education">/EDU</a>
+        <a href="#certifications">/CERT</a>
+        <a href="#contact">/CONN</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1 class="glitch">MUHAMAD ASYRAF BIN SARKEI</h1>
+      <p>> <span id="typed-text"></span></p>
+      <a href="Muhamad_Asyraf_Resume.pdf" download class="resume-button">Initialize_Download.exe</a>
+    </section>
+
+    <!-- EXPERIENCE RESTORED -->
+    <section id="experience">
+      <h2>// SYSTEM_LOG: EXPERIENCE</h2>
+      <div class="exp-item">
+        <h3>System Analyst • R&D</h3>
+        <p><strong>REDtone Telecommunication Sdn. Bhd</strong> | Mar 2024 - Present</p>
+        <ul>
+          <li>Led migration of legacy systems to modern platforms (target ~50% perf improvement).</li>
+          <li>Coordinated cross-functional teams (devs, testers, BUs) for on-schedule delivery.</li>
+          <li>Gathered/documented requirements with stakeholders.</li>
+          <li>Developed JS-based internal ticketing systems.</li>
+          <li>Conducted SQL data validation and integrity checks.</li>
+        </ul>
+      </div>
+      <div class="exp-item" style="margin-top:2rem;">
+        <h3>Analyst Programmer • App Dev & Support</h3>
+        <p><strong>Pengurusan Air Selangor Sdn. Bhd</strong> | Sep 2017 - Feb 2024</p>
+        <ul>
+          <li>Oversaw configuration and troubleshooting of Azure Cloud applications.</li>
+          <li>Employed Agile methodologies and introduced early DevOps practices.</li>
+          <li>Led system upgrades using Kubernetes and Locus.</li>
+          <li>SME for evaluating vendor proposals and technical requirements.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ALL 19 PROJECTS RESTORED -->
+    <section id="projects">
+      <h2>// SUBDIRECTORY: PROJECTS</h2>
+      <div class="project-grid">
+        <div class="project-card"><h3>VRS</h3><p>Vendor onboarding compliance system.</p><div class="tags"><span class="tag">System Analyst</span><span class="tag">Procurement</span></div></div>
+        <div class="project-card"><h3>Wholesale Portal</h3><p>User data for NG999 emergency services.</p><div class="tags"><span class="tag">API Design</span><span class="tag">Data Management</span></div></div>
+        <div class="project-card"><h3>MERS NG999</h3><p>Lead for national emergency response system.</p><div class="tags"><span class="tag">Architecture</span></div></div>
+        <div class="project-card"><h3>UEBM</h3><p>Centralized electrical billing management.</p><div class="tags"><span class="tag">Billing</span><span class="tag">Data</span></div></div>
+        
+        <!-- HIDDEN PROJECTS (Total Restored) -->
+        <div class="project-card hidden"><h3>LOB System</h3><p>Staff list and financial reporting automation.</p><div class="tags"><span class="tag">HR</span><span class="tag">Finance</span></div></div>
+        <div class="project-card hidden"><h3>Legacy Migration</h3><p>SQL Server 2000 to 2022 upgrade.</p><div class="tags"><span class="tag">Migration</span><span class="tag">SQL Server</span></div></div>
+        <div class="project-card hidden"><h3>Commission System</h3><p>Agent commission management platform.</p><div class="tags"><span class="tag">Management</span></div></div>
+        <div class="project-card hidden"><h3>MyGovUC 3.0</h3><p>Large-scale Govt IT project (EDU & GOV).</p><div class="tags"><span class="tag">Cloud</span><span class="tag">Gov</span></div></div>
+        <div class="project-card hidden"><h3>CMI</h3><p>End user journey capturing for Air Selangor.</p><div class="tags"><span class="tag">Mobile</span><span class="tag">CX</span></div></div>
+        <div class="project-card hidden"><h3>CCS</h3><p>Oracle Cloud consumer account monitoring.</p><div class="tags"><span class="tag">Oracle</span><span class="tag">Cloud</span></div></div>
+        <div class="project-card hidden"><h3>AS Mobile App</h3><p>Water usage and billing tracking app.</p><div class="tags"><span class="tag">Mobile</span><span class="tag">Portal</span></div></div>
+        <div class="project-card hidden"><h3>OneScreen</h3><p>Internal water disruption monitoring tool.</p><div class="tags"><span class="tag">Internal Tool</span></div></div>
+        <div class="project-card hidden"><h3>Oracle CCB</h3><p>Customer Care and Billing management.</p><div class="tags"><span class="tag">Oracle</span><span class="tag">Billing</span></div></div>
+        <div class="project-card hidden"><h3>ThirdParty System</h3><p>Claims management for 3rd party entities.</p><div class="tags"><span class="tag">Claims</span></div></div>
+        <div class="project-card hidden"><h3>iProcurement</h3><p>Internal claim and expense management.</p><div class="tags"><span class="tag">Procurement</span></div></div>
+        <div class="project-card hidden"><h3>Salesforce</h3><p>CRM for water complaint population.</p><div class="tags"><span class="tag">CRM</span><span class="tag">Salesforce</span></div></div>
+        <div class="project-card hidden"><h3>WorkPayment</h3><p>Repair work claim handling system.</p><div class="tags"><span class="tag">Internal</span></div></div>
+        <div class="project-card hidden"><h3>Oracle MWM</h3><p>Workforce management for site visits.</p><div class="tags"><span class="tag">Oracle</span><span class="tag">Workforce</span></div></div>
+        <div class="project-card hidden"><h3>iJob</h3><p>Pipe repair work and claim handling.</p><div class="tags"><span class="tag">Internal Tool</span></div></div>
+      </div>
+      <button class="load-more-button" id="load-more">SYS_READ_ALL_PROJECTS</button>
+    </section>
+
+    <!-- SKILLS RESTORED -->
+    <section id="skills">
+      <h2>// CAPABILITIES_MATRIX</h2>
+      <div class="skill-pills">
+        <span class="skill-pill">PHP</span><span class="skill-pill">C++</span><span class="skill-pill">Java</span>
+        <span class="skill-pill">JavaScript</span><span class="skill-pill">Python</span><span class="skill-pill">MySQL</span>
+        <span class="skill-pill">Oracle DB</span><span class="skill-pill">JIRA</span><span class="skill-pill">Git</span>
+        <span class="skill-pill">Docker</span><span class="skill-pill">Kubernetes</span><span class="skill-pill">Gemini CLI</span>
+      </div>
+    </section>
+
+    <!-- EDUCATION RESTORED -->
+    <section id="education">
+      <h2>// ACADEMIC_RECORDS</h2>
+      <p><strong>B.Sc (Hons) Information Technology</strong><br>UiTM Arau, Perlis | 2018</p>
+      <p><strong>Matriculation Computer Science</strong><br>Kolej Matrikulasi Selangor | 2011</p>
+    </section>
+
+    <!-- CERTIFICATIONS RESTORED -->
+    <section id="certifications">
+      <h2>// AUTH_CERTIFICATIONS</h2>
+      <ul class="cert-list">
+        <li>Professional Scrum Master (PSM1) - May 2025</li>
+        <li>Project Management Course: PROject Manager (Udemy) - July 2025</li>
+        <li>CMMI Level 3 PM - REDtone Engineering - May 2025</li>
+        <li>Jira Agile Project Management - April 2025</li>
+        <li>CMMI Level 3 Configuration Manager - REDtone - April 2025</li>
+        <li>JIRA End User (Iverson Associates) - Jan 2024</li>
+        <li>Oracle Field Service Cloud (OFSC) Training - 2022</li>
+        <li>DevOps Engineer Training - 2021</li>
+        <li>National Co-Curriculum Award - 2010</li>
+      </ul>
+    </section>
+
+    <!-- CONTACT RESTORED -->
+    <section id="contact">
+      <h2>// ESTABLISH_COMMUNICATION</h2>
+      <p>EMAIL: <a href="mailto:muhamadasyraf.sarkei@gmail.com" style="color:var(--primary-glow)">muhamadasyraf.sarkei@gmail.com</a></p>
+      <p>TEL: <a href="tel:+60124152996" style="color:var(--primary-glow)">+6012-4152996</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 ASYRAF_ROOT. ACCESS_RESTRICTED. <a href="invoice.html" style="color:#050505; text-decoration:none;">lucky</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Intersection Observer
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+      // Typed.js
+      new Typed('#typed-text', {
+        strings: ["System Analyst", "Technical Lead", "Scrum Master", "Developer"],
+        typeSpeed: 50,
+        backSpeed: 30,
+        loop: true
+      });
+
+      // Load More logic
+      const btn = document.getElementById('load-more');
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.project-card.hidden').forEach(p => p.classList.remove('hidden'));
+        btn.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
