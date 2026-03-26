@@ -3,238 +3,347 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Muhamad Asyraf | Parallax Portfolio</title>
+  <title>Asyraf Sarkei | Immersive Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
   <style>
     :root {
-      --glass: rgba(15, 23, 42, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.1);
       --primary: #3b82f6;
-      --text: #ffffff;
+      --glass: rgba(10, 15, 30, 0.7);
+      --border: rgba(255, 255, 255, 0.1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #020617;
-      color: var(--text);
+      color: #fff;
       overflow-x: hidden;
+      /* This enables the smooth scroll feel */
+      scroll-behavior: smooth; 
     }
 
-    /* --- PARALLAX ENGINE --- */
-    .parallax-wrapper {
-      height: 100vh;
-      overflow-x: hidden;
-      overflow-y: auto;
-      perspective: 10px; /* Essential for 3D depth */
-    }
-
-    .parallax-layer {
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* --- THE PARALLAX STAGE --- */
+    .parallax-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: -1;
+      overflow: hidden;
     }
 
-    /* Far Background (Moves Slowest) */
-    .layer-bg {
-      transform: translateZ(-20px) scale(3);
-      background: linear-gradient(to bottom, #1e293b, #020617);
-      height: 120vh;
-    }
-
-    /* Middle Scenery (Mountains) */
-    .layer-mid {
-      transform: translateZ(-10px) scale(2);
-      background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070') no-repeat center bottom;
+    .parallax-bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 120%;
+      background: linear-gradient(rgba(2, 6, 23, 0.4), #020617),
+                  url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070');
       background-size: cover;
-      height: 110vh;
-      opacity: 0.6;
+      background-position: center;
+      transition: transform 0.1s ease-out; /* Smooth follow */
+      will-change: transform;
     }
 
-    /* Foreground Content (Moves Normal) */
-    .content-wrapper {
+    /* --- FLOATING CONTENT --- */
+    .scroll-content {
       position: relative;
       z-index: 1;
-      background: transparent;
-      padding-top: 50vh; /* Start content lower to see the scenery */
-    }
-
-    /* --- GLASS STYLING --- */
-    section {
-      max-width: 1000px;
-      margin: 0 auto 5rem auto;
-      padding: 3rem;
-      background: var(--glass);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 30px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      width: 100%;
     }
 
     header {
       position: fixed;
       top: 0; width: 100%;
-      z-index: 1000;
-      padding: 1.5rem 2rem;
-      background: rgba(2, 6, 23, 0.4);
-      backdrop-filter: blur(10px);
+      padding: 1.5rem 5%;
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid var(--glass-border);
+      align-items: center;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
     }
 
-    nav a { color: white; text-decoration: none; margin-left: 20px; font-weight: 600; font-size: 0.9rem; }
-    
-    .hero-title { text-align: center; margin-bottom: 10vh; }
-    .hero-title h1 { font-size: 4rem; font-weight: 800; text-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-
-    .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .project-card { 
-      background: rgba(255,255,255,0.05); 
-      padding: 1.5rem; 
-      border-radius: 20px; 
-      border: 1px solid var(--glass-border);
-      transition: transform 0.3s ease;
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: 0.3s;
     }
-    .project-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); }
-    .tag { font-size: 0.7rem; background: var(--primary); padding: 3px 10px; border-radius: 50px; margin: 4px; display: inline-block; }
+
+    .nav-links a:hover { color: var(--primary); }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      background: linear-gradient(to bottom, #fff, #64748b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* --- THE "MOVING" SECTIONS --- */
+    section {
+      max-width: 900px;
+      margin: 0 auto 15vh auto;
+      padding: 4rem;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    section.reveal {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      transition: 0.4s;
+    }
+
+    .project-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.03);
+      border-color: var(--primary);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary);
+      border-radius: 50px;
+      font-size: 0.7rem;
+      margin-top: 10px;
+      font-weight: 600;
+    }
 
     .hidden { display: none; }
+
     .load-more {
-      display: block; margin: 2rem auto; padding: 12px 30px;
-      background: var(--primary); color: white; border: none; border-radius: 50px; cursor: pointer;
+      margin: 3rem auto 0;
+      display: block;
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 12px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
     }
 
-    ul { padding-left: 1.2rem; }
-    li { margin-bottom: 0.5rem; }
+    .load-more:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 5rem 0;
+      color: #64748b;
+    }
+
+    /* Smooth Down Arrow */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-10px);}
+      60% {transform: translateY(-5px);}
+    }
   </style>
 </head>
 <body>
 
+  <!-- Background that moves with scroll -->
+  <div class="parallax-container">
+    <div class="parallax-bg" id="bg"></div>
+  </div>
+
   <header>
-    <div style="font-weight: 800;">ASYRAF.DEV</div>
-    <nav>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#certifications">Certs</a>
+    <div style="font-weight: 800; font-size: 1.2rem;">ASYRAF.</div>
+    <nav class="nav-links">
+      <a href="#experience">EXPERIENCE</a>
+      <a href="#projects">PROJECTS</a>
+      <a href="#skills">SKILLS</a>
+      <a href="#certifications">CERTS</a>
     </nav>
   </header>
 
-  <div class="parallax-wrapper">
-    <div class="parallax-layer layer-bg"></div>
-    <div class="parallax-layer layer-mid"></div>
-
-    <div class="content-wrapper">
-      
-      <div class="hero-title">
-        <h1>Muhamad Asyraf</h1>
-        <p style="font-size: 1.5rem;"><span id="typed-text"></span></p>
-      </div>
-
-      <section id="experience">
-        <h2>Professional Journey</h2>
-        <div style="margin-top: 2rem;">
-          <h3>System Analyst • REDtone</h3>
-          <p style="color: var(--primary); font-weight: 600;">2024 - Present</p>
-          <ul>
-            <li>Led migration of legacy systems to modern platforms (target ~50% perf improvement).</li>
-            <li>Coordinated cross-functional teams (developers, testers, business units).</li>
-            <li>Developed JavaScript-based internal ticketing systems.</li>
-            <li>Conducted SQL data validation and integrity checks.</li>
-          </ul>
-        </div>
-        <div style="margin-top: 2rem;">
-          <h3>Analyst Programmer • Air Selangor</h3>
-          <p style="color: var(--primary); font-weight: 600;">2017 - 2024</p>
-          <ul>
-            <li>Managed configuration and troubleshooting of Azure Cloud applications.</li>
-            <li>Employed Agile methodologies and introduced early DevOps practices.</li>
-            <li>Led system upgrades using Kubernetes and Locus.</li>
-            <li>SME in evaluating vendor proposals.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="projects">
-        <h2>Key Projects (Total 19)</h2>
-        <div class="project-grid">
-          <div class="project-card"><h3>VRS System</h3><p>Vendor registration and procurement compliance.</p><div class="tag">Procurement</div></div>
-          <div class="project-card"><h3>Wholesale Portal</h3><p>NG999 emergency services data management.</p><div class="tag">API Design</div></div>
-          <div class="project-card"><h3>MERS NG999</h3><p>Lead for national emergency response system.</p><div class="tag">Architecture</div></div>
-          <div class="project-card"><h3>UEBM</h3><p>Centralized electrical billing management.</p><div class="tag">Billing</div></div>
-          
-          <div class="project-card hidden"><h3>LOB System</h3><p>Staff list and financial reporting automation.</p><div class="tag">HR</div></div>
-          <div class="project-card hidden"><h3>Legacy Migration</h3><p>SQL Server 2000 to 2022 upgrade.</p><div class="tag">SQL</div></div>
-          <div class="project-card hidden"><h3>Commission System</h3><p>Agent commission management platform.</p><div class="tag">Fintech</div></div>
-          <div class="project-card hidden"><h3>MyGovUC 3.0</h3><p>Government IT project managing EDU/GOV domains.</p><div class="tag">Cloud</div></div>
-          <div class="project-card hidden"><h3>CMI</h3><p>Capture customer journey for Air Selangor.</p><div class="tag">Mobile</div></div>
-          <div class="project-card hidden"><h3>CCS</h3><p>Oracle Cloud consumer account monitoring.</p><div class="tag">Oracle</div></div>
-          <div class="project-card hidden"><h3>Air Selangor App</h3><p>Water usage and billing tracking app.</p><div class="tag">Portal</div></div>
-          <div class="project-card hidden"><h3>OneScreen</h3><p>Water disruption monitoring tool.</p><div class="tag">Internal</div></div>
-          <div class="project-card hidden"><h3>Oracle CCB</h3><p>Customer Care and Billing management.</p><div class="tag">Oracle</div></div>
-          <div class="project-card hidden"><h3>ThirdParty System</h3><p>Claims management for 3rd party entities.</p><div class="tag">Claims</div></div>
-          <div class="project-card hidden"><h3>iProcurement</h3><p>Internal claim and expense management.</p><div class="tag">Procurement</div></div>
-          <div class="project-card hidden"><h3>Salesforce</h3><p>CRM for water complaint population.</p><div class="tag">CRM</div></div>
-          <div class="project-card hidden"><h3>WorkPayment</h3><p>Repair work claim handling system.</p><div class="tag">Payment</div></div>
-          <div class="project-card hidden"><h3>Oracle MWM</h3><p>Workforce management for site visits.</p><div class="tag">Workforce</div></div>
-          <div class="project-card hidden"><h3>iJob</h3><p>Pipe repair work and claim handling.</p><div class="tag">Internal</div></div>
-        </div>
-        <button class="load-more" id="load-more">Load All Deployment History</button>
-      </section>
-
-      <section id="skills">
-        <h2>Technical Stack</h2>
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem;">
-          <span class="tag" style="background: rgba(255,255,255,0.1); padding: 10px 20px;">PHP</span>
-          <span class="tag" style="background: rgba(255,255,255,0.1); padding: 10px 20px;">JavaScript</span>
-          <span class="tag" style="background: rgba(255,255,255,0.1); padding: 10px 20px;">Python</span>
-          <span class="tag" style="background: rgba(255,255,255,0.1); padding: 10px 20px;">Docker</span>
-          <span class="tag" style="background: rgba(255,255,255,0.1); padding: 10px 20px;">Kubernetes</span>
-          <span class="tag" style="background: rgba(255,255,255,0.1); padding: 10px 20px;">SQL Server</span>
-        </div>
-      </section>
-
-      <section id="certifications">
-        <h2>Certifications</h2>
-        <ul style="list-style: none;">
-          <li>✅ Professional Scrum Master (PSM1) - 2025</li>
-          <li>✅ CMMI Level 3 Project Manager - 2025</li>
-          <li>✅ Oracle Field Service Cloud (OFSC) - 2022</li>
-          <li>✅ DevOps Engineer Training - 2021</li>
-          <li>✅ National Co-Curriculum Award - 2010</li>
-        </ul>
-      </section>
-
-      <footer style="text-align: center; padding-bottom: 5rem;">
-        <p>&copy; 2026 Muhamad Asyraf Bin Sarkei</p>
-      </footer>
-
+  <div class="scroll-content">
+    <div class="hero">
+      <h1>Asyraf Sarkei</h1>
+      <p style="font-size: 1.5rem; opacity: 0.8;"><span id="typed-text"></span></p>
+      <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
     </div>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <h2>Professional Experience</h2>
+      <div style="margin-bottom: 3rem;">
+        <h3>System Analyst • REDtone</h3>
+        <p style="color: var(--primary); margin-bottom: 1rem;">2024 — PRESENT</p>
+        <ul style="list-style: none; color: #94a3b8;">
+          <li style="margin-bottom: 8px;">• Leading high-impact migration of legacy systems to modern architectures.</li>
+          <li style="margin-bottom: 8px;">• Orchestrating cross-functional teams for seamless delivery.</li>
+          <li style="margin-bottom: 8px;">• Engineering internal JS-based ticketing and SQL integrity tools.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Analyst Programmer • Air Selangor</h3>
+        <p style="color: var(--primary); margin-bottom: 1rem;">2017 — 2024</p>
+        <ul style="list-style: none; color: #94a3b8;">
+          <li style="margin-bottom: 8px;">• Managed Azure Cloud apps and Kubernetes cluster operations.</li>
+          <li style="margin-bottom: 8px;">• Pioneered Agile/DevOps culture within the application team.</li>
+          <li style="margin-bottom: 8px;">• Served as Technical SME for high-value vendor evaluations.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 19 PROJECTS RESTORED -->
+    <section id="projects">
+      <h2>Featured Work</h2>
+      <div class="project-grid">
+        <!-- 4 Visible -->
+        <div class="project-card"><h3>VRS System</h3><p>Procurement compliance and vendor onboarding.</p><div class="tag">System Analyst</div></div>
+        <div class="project-card"><h3>MERS NG999</h3><p>Technical lead for national emergency response.</p><div class="tag">Architecture</div></div>
+        <div class="project-card"><h3>Wholesale Portal</h3><p>Emergency user data management for NG999.</p><div class="tag">API Design</div></div>
+        <div class="project-card"><h3>UEBM</h3><p>Centralized electrical account billing platform.</p><div class="tag">Data Management</div></div>
+        
+        <!-- Hidden 15 Restored -->
+        <div class="project-card hidden"><h3>LOB System</h3><p>Staff and financial reporting replacement.</p><div class="tag">Management</div></div>
+        <div class="project-card hidden"><h3>Migration 2.0</h3><p>SQL Server 2000 to 2022 overhaul.</p><div class="tag">Migration</div></div>
+        <div class="project-card hidden"><h3>Commission System</h3><p>Agent commission tracking and handling.</p><div class="tag">Fintech</div></div>
+        <div class="project-card hidden"><h3>MyGovUC 3.0</h3><p>Cloud management for EDU & GOV domains.</p><div class="tag">Government</div></div>
+        <div class="project-card hidden"><h3>CMI Initiative</h3><p>Capturing SuperApp end-user journeys.</p><div class="tag">Mobile</div></div>
+        <div class="project-card hidden"><h3>Customer Cloud</h3><p>Oracle application cloud account monitoring.</p><div class="tag">Oracle</div></div>
+        <div class="project-card hidden"><h3>AS Portal</h3><p>Consumer water usage tracking portal.</p><div class="tag">Public Portal</div></div>
+        <div class="project-card hidden"><h3>OneScreen</h3><p>Internal web tool for water disruption.</p><div class="tag">Internal Tool</div></div>
+        <div class="project-card hidden"><h3>Oracle CCB</h3><p>Utilities customer care & billing cloud.</p><div class="tag">Oracle</div></div>
+        <div class="project-card hidden"><h3>ThirdParty</h3><p>Management of 3rd party claims/entities.</p><div class="tag">Claims</div></div>
+        <div class="project-card hidden"><h3>iProcurement</h3><p>Internal expense management system.</p><div class="tag">Procurement</div></div>
+        <div class="project-card hidden"><h3>Salesforce</h3><p>CRM population for water complaints.</p><div class="tag">Salesforce</div></div>
+        <div class="project-card hidden"><h3>WorkPayment</h3><p>Repair work claim processing system.</p><div class="tag">Internal</div></div>
+        <div class="project-card hidden"><h3>Oracle MWM</h3><p>Workforce site visit management.</p><div class="tag">Workforce</div></div>
+        <div class="project-card hidden"><h3>iJob</h3><p>Pipe repair workflow and claim handler.</p><div class="tag">Internal Tool</div></div>
+      </div>
+      <button class="load-more" id="load-more">Show Entire Archive</button>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <h2>Expertise Matrix</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+        <span class="project-card" style="padding: 10px 25px;">PHP</span>
+        <span class="project-card" style="padding: 10px 25px;">Python</span>
+        <span class="project-card" style="padding: 10px 25px;">Java</span>
+        <span class="project-card" style="padding: 10px 25px;">JavaScript</span>
+        <span class="project-card" style="padding: 10px 25px;">Docker</span>
+        <span class="project-card" style="padding: 10px 25px;">Kubernetes</span>
+        <span class="project-card" style="padding: 10px 25px;">SQL Server</span>
+        <span class="project-card" style="padding: 10px 25px;">Scrum (PSM1)</span>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section id="certifications">
+      <h2>Certifications & Awards</h2>
+      <ul style="list-style: none;">
+        <li style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+          <strong>PSM1 Certified Scrum Master</strong> — Scrum.org (2025)
+        </li>
+        <li style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+          <strong>CMMI Level 3 Manager</strong> — REDtone Engineering (2025)
+        </li>
+        <li style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+          <strong>Oracle Field Service Cloud</strong> — Oracle (2022)
+        </li>
+        <li style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+          <strong>DevOps Engineer Training</strong> — Beginner to Pro (2021)
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>Muhamad Asyraf Bin Sarkei // 2026 // <a href="mailto:muhamadasyraf.sarkei@gmail.com" style="color:var(--primary); text-decoration:none;">Email Me</a></p>
+    </footer>
   </div>
 
   <script>
-    // Typed.js
+    // 1. SMOOTH PARALLAX MOVEMENT
+    const bg = document.getElementById('bg');
+    window.addEventListener('scroll', () => {
+      let offset = window.pageYOffset;
+      // This creates the "liquid" motion by scaling and shifting the background
+      bg.style.transform = `translateY(${offset * 0.4}px) scale(${1 + offset * 0.0002})`;
+    });
+
+    // 2. REVEAL SECTIONS ON SCROLL
+    const observerOptions = { threshold: 0.15 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+    // 3. TYPED TEXT
     new Typed('#typed-text', {
       strings: ["Technical Lead", "System Analyst", "Scrum Master", "Developer"],
-      typeSpeed: 50,
-      backSpeed: 30,
+      typeSpeed: 60,
+      backSpeed: 40,
       loop: true
     });
 
-    // Load More
-    const btn = document.getElementById('load-more');
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.project-card.hidden').forEach(p => p.classList.remove('hidden'));
-      btn.style.display = 'none';
+    // 4. LOAD MORE
+    document.getElementById('load-more').addEventListener('click', function() {
+      document.querySelectorAll('.project-card.hidden').forEach(card => card.classList.remove('hidden'));
+      this.style.display = 'none';
     });
   </script>
 </body>
