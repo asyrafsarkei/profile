@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muhamad Asyraf | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --primary: #60a5fa;
+      --text: #ffffff;
+      --sub-text: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      color: var(--text);
+      line-height: 1.6;
+      /* Background Scenery - You can replace this URL with any high-res scenery */
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                  url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2070') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+    }
+
+    /* Glassmorphism Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 0;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--primary); }
+
+    /* Hero Section */
+    .hero {
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(to right, #fff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p { font-size: 1.2rem; color: var(--sub-text); margin: 20px 0; }
+
+    .btn-main {
+      padding: 12px 30px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 10px 20px rgba(96, 165, 250, 0.3);
+    }
+
+    .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(96, 165, 250, 0.4); }
+
+    /* Frosted Glass Content Blocks */
+    section {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 3rem;
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+
+    section.visible { opacity: 1; transform: translateY(0); }
+
+    h2 { font-size: 2rem; margin-bottom: 2rem; border-bottom: 2px solid var(--primary); display: inline-block; }
+
+    /* Project Cards */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 16px;
+      transition: background 0.3s;
+    }
+
+    .project-card:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .tag {
+      font-size: 0.75rem;
+      background: rgba(96, 165, 250, 0.2);
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin: 5px 5px 0 0;
+      display: inline-block;
+    }
+
+    /* Skills */
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+    }
+
+    .hidden { display: none; }
+
+    .load-more {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 10px 25px;
+      border-radius: 50px;
+      cursor: pointer;
+      display: block;
+      margin: 30px auto;
+      font-family: inherit;
+    }
+
+    footer { text-align: center; padding: 3rem; color: var(--sub-text); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div style="font-weight: 800; letter-spacing: 1px;">M. ASYRAF</div>
+      <div class="nav-links">
+        <a href="#experience">Experience</a>
+        <a href="#projects">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#certifications">Certifications</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" style="background: none; border: none; backdrop-filter: none; opacity: 1; transform: none;">
+      <h1>Muhamad Asyraf</h1>
+      <p><span id="typed-text"></span></p>
+      <a href="Muhamad_Asyraf_Resume.pdf" download class="btn-main">Download Resume</a>
+    </section>
+
+    <section id="experience">
+      <h2>Experience</h2>
+      <div class="exp-box">
+        <h3>System Analyst • REDtone</h3>
+        <p><em>2024 - Present</em></p>
+        <ul>
+          <li>Migrating legacy systems for 50% performance gains.</li>
+          <li>Cross-functional team coordination & requirement gathering.</li>
+          <li>SQL data validation and ticketing system development.</li>
+        </ul>
+      </div>
+      <br>
+      <div class="exp-box">
+        <h3>Analyst Programmer • Air Selangor</h3>
+        <p><em>2017 - 2024</em></p>
+        <ul>
+          <li>Managed Azure Cloud applications and Kubernetes deployments.</li>
+          <li>Implemented Agile/DevOps and led major system upgrades.</li>
+          <li>Subject Matter Expert for vendor evaluations.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Featured Projects</h2>
+      <div class="project-grid">
+        <div class="project-card"><h3>VRS System</h3><p>Vendor registration and procurement compliance.</p><div class="tag">Procurement</div></div>
+        <div class="project-card"><h3>Wholesale Portal</h3><p>Centralized NG999 emergency services data.</p><div class="tag">API Design</div></div>
+        <div class="project-card"><h3>MERS NG999</h3><p>National emergency response system Lead.</p><div class="tag">Architecture</div></div>
+        <div class="project-card"><h3>UEBM</h3><p>Electrical bill and account management.</p><div class="tag">Billing</div></div>
+        
+        <div class="project-card hidden"><h3>LOB System</h3><p>Financial reporting and HR management.</p><div class="tag">Management</div></div>
+        <div class="project-card hidden"><h3>MyGovUC 3.0</h3><p>Large-scale cloud management for Government.</p><div class="tag">Cloud</div></div>
+        <div class="project-card hidden"><h3>Salesforce CRM</h3><p>Consumer complaint tracking and population.</p><div class="tag">CRM</div></div>
+        </div>
+      <button class="load-more" id="load-more">View All Projects</button>
+    </section>
+
+    <section id="skills">
+      <h2>Skills & Tech</h2>
+      <div class="skill-pills">
+        <span class="skill-pill">PHP</span><span class="skill-pill">Python</span>
+        <span class="skill-pill">Java</span><span class="skill-pill">JavaScript</span>
+        <span class="skill-pill">MySQL</span><span class="skill-pill">Docker</span>
+        <span class="skill-pill">Kubernetes</span><span class="skill-pill">Jira</span>
+      </div>
+    </section>
+
+    <section id="certifications">
+      <h2>Certifications</h2>
+      <p>• Professional Scrum Master (PSM1) - 2025</p>
+      <p>• CMMI Level 3 Project Manager - 2025</p>
+      <p>• Oracle Field Service Cloud (OFSC) - 2022</p>
+      <p>• DevOps Engineer Training - 2021</p>
+    </section>
+
+    <section id="contact" style="text-align: center;">
+      <h2>Get In Touch</h2>
+      <p>muhamadasyraf.sarkei@gmail.com</p>
+      <p>+6012-4152996</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Muhamad Asyraf Bin Sarkei. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Reveal on Scroll
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+      // Typed text
+      new Typed('#typed-text', {
+        strings: ["Technical Lead", "System Analyst", "Scrum Master", "Developer"],
+        typeSpeed: 50,
+        backSpeed: 30,
+        loop: true
+      });
+
+      // Load more
+      const btn = document.getElementById('load-more');
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.project-card.hidden').forEach(p => p.classList.remove('hidden'));
+        btn.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
