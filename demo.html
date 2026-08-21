@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MPKlang Dynamic SLA Accelerator - System UI</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            shrdc: {
+              red: '#8B0000',
+              gold: '#FFC72C',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-red-800 selection:text-white pb-12">
+
+  <!-- Floating Toast Notification -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 transition-all duration-300 hidden">
+    <div id="toast-card" class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-2xl border text-sm font-medium bg-red-950/90 border-red-600 text-red-200 backdrop-blur-md">
+      <i data-lucide="bell" id="toast-icon" class="w-4 h-4 shrink-0 text-red-400 animate-bounce"></i>
+      <span id="toast-message">🚨 Surge Breach: Bandar Bukit Raja reached 11/10 cases!</span>
+      <button onclick="dismissToast()" class="ml-2 hover:opacity-70">
+        <i data-lucide="x" class="w-4 h-4 text-slate-400"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Corporate Header -->
+  <header class="border-b border-slate-800 bg-slate-900/60 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-8 w-2 bg-gradient-to-b from-red-700 via-amber-400 to-red-800 rounded-full"></div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold tracking-tight text-white uppercase">MPKlang Dynamic SLA Accelerator</h1>
+            <span class="text-[10px] font-bold bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">
+              SHRDC Hackathon
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Smart Local Authority Dual-Threshold Automated Surge Engine</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 text-xs font-mono bg-slate-950 px-3 py-1.5 rounded-md border border-slate-800 text-slate-400">
+        <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400 animate-pulse"></i>
+        <span>Engine: Standalone Live</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 pt-8 space-y-6">
+    
+    <!-- Top Control Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- 1. Target Zone Configuration -->
+      <div class="lg:col-span-4 bg-slate-900/80 border border-slate-800/80 rounded-xl p-5 shadow-lg space-y-5">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 border-b border-slate-800 pb-3">
+          <i data-lucide="sliders" class="w-4 h-4"></i>
+          <span>1. Target Zone Configuration</span>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-xs text-slate-400 font-medium">Select Sub-Kawasan Zone</label>
+          <div class="relative">
+            <i data-lucide="building-2" class="w-4 h-4 absolute left-3 top-3 text-slate-500"></i>
+            <select id="zone-select" onchange="updateZoneData()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 pl-9 pr-3 py-2.5 rounded-lg text-sm font-medium focus:outline-none focus:border-red-700 transition-colors">
+              <option value="Bandar Bukit Raja">Bandar Bukit Raja</option>
+              <option value="Taman Sri Muda">Taman Sri Muda</option>
+              <option value="Pandamaran">Pandamaran</option>
+              <option value="Port Klang Zone 1">Port Klang Zone 1</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-slate-950/60 p-4 rounded-lg border border-slate-800/80 space-y-4">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-300">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-red-500"></i>
+            <span>Engine Window Settings</span>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label class="text-[11px] text-slate-400">Rolling Window (Days)</label>
+              <input type="number" id="window-days" value="7" onchange="renderUI()" class="w-full bg-slate-900 border border-slate-800 p-2 text-sm rounded-md font-mono text-amber-400 focus:outline-none focus:border-red-700">
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] text-slate-400">Surge Threshold</label>
+              <input type="number" id="surge-threshold" value="10" onchange="renderUI()" class="w-full bg-slate-900 border border-slate-800 p-2 text-sm rounded-md font-mono text-amber-400 focus:outline-none focus:border-red-700">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Dynamic Engine Dispatch Monitor -->
+      <div class="lg:col-span-8 bg-slate-900/80 border border-slate-800/80 rounded-xl p-5 shadow-lg space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span>2. Dynamic Engine Dispatch Monitor</span>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">Zone: <span id="display-zone-name" class="text-white font-semibold">Bandar Bukit Raja</span></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Capacity Gauge -->
+          <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs text-slate-400">Active Complaints</span>
+              <span id="display-window-days" class="text-xs font-mono text-slate-500">7-Day Window</span>
+            </div>
+            
+            <div class="flex items-baseline gap-2">
+              <span id="current-count" class="text-3xl font-black text-white font-mono">0</span>
+              <span id="max-threshold-label" class="text-sm font-mono text-slate-500">/ 10 max</span>
+            </div>
+
+            <!-- Visual Progress Bar -->
+            <div class="space-y-1">
+              <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                <div id="capacity-bar" class="h-full transition-all duration-500 bg-amber-400" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                <span>0</span>
+                <span id="capacity-percentage">0% Capacity</span>
+                <span id="bar-limit-label">10 Limit</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dispatch Status Badge -->
+          <div id="dispatch-card" class="p-4 rounded-xl border flex flex-col justify-between bg-slate-950/80 border-slate-800 text-slate-300">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Dispatch Status</span>
+              <i id="dispatch-icon" data-lucide="clock" class="w-5 h-5 text-amber-400"></i>
+            </div>
+
+            <div class="my-2">
+              <div id="dispatch-status-title" class="text-base font-extrabold flex items-center gap-2 text-amber-400 font-mono tracking-tight text-lg">
+                📦 BATCH QUEUE
+              </div>
+              <p id="dispatch-status-desc" class="text-xs text-slate-400 mt-1">
+                Standard SLA processing. Auto-sweep in 7 days.
+              </p>
+            </div>
+
+            <span id="dispatch-mode-foot" class="text-[11px] font-mono text-slate-500">
+              SLA Schedule: NORMAL
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Simulation Buttons -->
+        <div class="pt-2 flex items-center justify-between border-t border-slate-800/80">
+          <button onclick="addComplaint()" class="bg-red-700 hover:bg-red-600 text-white font-semibold text-xs px-4 py-3 rounded-lg shadow-md transition-all flex items-center gap-2 active:scale-95">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Simulate Incoming Citizen Complaint
+          </button>
+
+          <button onclick="resetZoneData()" class="text-xs text-slate-400 hover:text-white underline font-mono">
+            Reset Zone Data
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 3. Active Ticket Feed Table -->
+    <div class="bg-slate-900/80 border border-slate-800/80 rounded-xl p-5 shadow-lg space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          <span>3. Pending Tickets Stream (<span id="table-zone-title">Bandar Bukit Raja</span>)</span>
+        </div>
+        <span class="text-xs text-slate-400 font-mono">
+          Total Pending: <span id="pending-ticket-count" class="text-white font-bold">0</span>
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-950 text-slate-400 uppercase font-mono border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">Ticket Reference</th>
+              <th class="py-3 px-4">Category</th>
+              <th class="py-3 px-4">Logged Time</th>
+              <th class="py-3 px-4">Priority Level</th>
+              <th class="py-3 px-4">State</th>
+            </tr>
+          </thead>
+          <tbody id="ticket-table-body" class="divide-y divide-slate-800/60 font-mono">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Script State Engine -->
+  <script>
+    // State Data
+    const mockDb = {
+      "Bandar Bukit Raja": [
+        { id: "T-904128", category: "Road Defect / Pothole", created_at: "10:14:22 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904129", category: "Drainage Overflow", created_at: "10:22:05 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904130", category: "Street Light Outage", created_at: "10:45:12 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904131", category: "Road Defect / Pothole", created_at: "11:02:40 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904132", category: "Illegal Garbage Dump", created_at: "11:15:00 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904133", category: "Road Defect / Pothole", created_at: "11:30:18 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904134", category: "Traffic Light Malfunction", created_at: "11:42:01 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-904135", category: "Road Defect / Pothole", created_at: "11:55:33 AM", priority: "NORMAL", status: "PENDING" },
+      ],
+      "Taman Sri Muda": [
+        { id: "T-801001", category: "Drainage Overflow", created_at: "08:10:00 AM", priority: "NORMAL", status: "PENDING" },
+        { id: "T-801002", category: "Drainage Overflow", created_at: "08:30:00 AM", priority: "NORMAL", status: "PENDING" }
+      ],
+      "Pandamaran": [],
+      "Port Klang Zone 1": []
+    };
+
+    let categories = [
+      "Road Defect / Pothole",
+      "Drainage Overflow",
+      "Street Light Outage",
+      "Illegal Garbage Dump",
+      "Traffic Light Malfunction"
+    ];
+
+    function getSelectedZone() {
+      return document.getElementById("zone-select").value;
+    }
+
+    function updateZoneData() {
+      renderUI();
+    }
+
+    function addComplaint() {
+      const zone = getSelectedZone();
+      const threshold = parseInt(document.getElementById("surge-threshold").value) || 10;
+      const currentList = mockDb[zone];
+      
+      const newCount = currentList.length + 1;
+      const isCritical = newCount > threshold;
+
+      const newTicket = {
+        id: "T-" + Math.floor(100000 + Math.random() * 900000),
+        category: categories[Math.floor(Math.random() * categories.length)],
+        created_at: new Date().toLocaleTimeString(),
+        priority: isCritical ? "CRITICAL" : "NORMAL",
+        status: "PENDING"
+      };
+
+      currentList.unshift(newTicket);
+
+      if (isCritical) {
+        showToast(`🚨 Surge Breach: ${zone} reached ${newCount}/${threshold} cases! Rapid Response Team dispatched.`, true);
+      } else {
+        showToast(`Ticket #${newTicket.id} logged for ${zone}`, false);
+      }
+
+      renderUI();
+    }
+
+    function resetZoneData() {
+      const zone = getSelectedZone();
+      mockDb[zone] = [];
+      renderUI();
+    }
+
+    function showToast(message, isCritical) {
+      const container = document.getElementById("toast-container");
+      const card = document.getElementById("toast-card");
+      const msg = document.getElementById("toast-message");
+      const icon = document.getElementById("toast-icon");
+
+      msg.innerText = message;
+      
+      if (isCritical) {
+        card.className = "flex items-center gap-3 px-4 py-3 rounded-lg shadow-2xl border text-sm font-medium bg-red-950/90 border-red-600 text-red-200 backdrop-blur-md";
+        icon.className = "w-4 h-4 shrink-0 text-red-400 animate-bounce";
+      } else {
+        card.className = "flex items-center gap-3 px-4 py-3 rounded-lg shadow-2xl border text-sm font-medium bg-slate-900/90 border-amber-500/50 text-amber-200 backdrop-blur-md";
+        icon.className = "w-4 h-4 shrink-0 text-amber-400";
+      }
+
+      container.classList.remove("hidden");
+    }
+
+    function dismissToast() {
+      document.getElementById("toast-container").classList.add("hidden");
+    }
+
+    function renderUI() {
+      const zone = getSelectedZone();
+      const windowDays = parseInt(document.getElementById("window-days").value) || 7;
+      const threshold = parseInt(document.getElementById("surge-threshold").value) || 10;
+      
+      const tickets = mockDb[zone] || [];
+      const currentCount = tickets.length;
+      const isBreached = currentCount > threshold;
+      const capacityPercent = Math.min(Math.round((currentCount / threshold) * 100), 100);
+
+      // Titles & Labels
+      document.getElementById("display-zone-name").innerText = zone;
+      document.getElementById("table-zone-title").innerText = zone;
+      document.getElementById("display-window-days").innerText = windowDays + "-Day Window";
+      document.getElementById("current-count").innerText = currentCount;
+      document.getElementById("max-threshold-label").innerText = "/ " + threshold + " max";
+      document.getElementById("bar-limit-label").innerText = threshold + " Limit";
+      document.getElementById("pending-ticket-count").innerText = currentCount;
+
+      // Progress Bar
+      const bar = document.getElementById("capacity-bar");
+      bar.style.width = capacityPercent + "%";
+      document.getElementById("capacity-percentage").innerText = capacityPercent + "% Capacity";
+
+      if (isBreached) {
+        bar.className = "h-full transition-all duration-500 bg-red-600";
+      } else {
+        bar.className = "h-full transition-all duration-500 bg-amber-400";
+      }
+
+      // Dispatch Card Status
+      const dispatchCard = document.getElementById("dispatch-card");
+      const dispatchTitle = document.getElementById("dispatch-status-title");
+      const dispatchDesc = document.getElementById("dispatch-status-desc");
+      const dispatchFoot = document.getElementById("dispatch-mode-foot");
+
+      if (isBreached) {
+        dispatchCard.className = "p-4 rounded-xl border flex flex-col justify-between bg-red-950/30 border-red-700/60 text-red-200";
+        dispatchTitle.innerHTML = "🚨 CRITICAL SURGE";
+        dispatchTitle.className = "text-base font-extrabold flex items-center gap-2 text-red-400 font-mono tracking-tight text-lg";
+        dispatchDesc.innerText = "Threshold breached. Rapid Response Team auto-dispatched.";
+        dispatchFoot.innerText = "SLA Bypass: ACTIVE";
+      } else {
+        dispatchCard.className = "p-4 rounded-xl border flex flex-col justify-between bg-slate-950/80 border-slate-800 text-slate-300";
+        dispatchTitle.innerHTML = "📦 BATCH QUEUE";
+        dispatchTitle.className = "text-base font-extrabold flex items-center gap-2 text-amber-400 font-mono tracking-tight text-lg";
+        dispatchDesc.innerText = `Standard SLA processing. Auto-sweep in ${windowDays} days.`;
+        dispatchFoot.innerText = "SLA Schedule: NORMAL";
+      }
+
+      // Render Table
+      const tbody = document.getElementById("ticket-table-body");
+      if (tickets.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colSpan="5" class="py-8 text-center text-slate-500">
+              No pending complaints logged in current window for this zone.
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = tickets.map(t => `
+          <tr class="hover:bg-slate-800/40 transition-colors">
+            <td class="py-3 px-4 text-slate-200 font-bold">${t.id}</td>
+            <td class="py-3 px-4 text-slate-300">${t.category}</td>
+            <td class="py-3 px-4 text-slate-400">${t.created_at}</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+                t.priority === "CRITICAL" 
+                  ? "bg-red-950 border border-red-700/60 text-red-300" 
+                  : "bg-slate-800 text-slate-400"
+              }">
+                ${t.priority}
+              </span>
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1.5 text-amber-400 text-[11px]">
+                <span class="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping"></span>
+                ${t.status}
+              </span>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      // Re-initialize Lucide Icons
+      lucide.createIcons();
+    }
+
+    // Initial Execution
+    window.onload = function() {
+      renderUI();
+    };
+  </script>
+
+</body>
+</html>

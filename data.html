@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPKlang Animal Disturbance Analysis (2025–2026 YTD)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="border-b border-slate-700 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-white tracking-wide">MPKlang Animal Disturbance Analysis</h1>
+                <p class="text-slate-400 text-sm mt-1">Executive Presentation Data Infographic (2025–2026 YTD)</p>
+            </div>
+            <div class="mt-4 md:mt-0 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 text-xs text-slate-300">
+                Data Scope: <span class="font-semibold text-sky-400">2025 – 2026 YTD</span>
+            </div>
+        </header>
+
+        <!-- Top Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Total Complaints</p>
+                <h2 class="text-3xl font-extrabold text-white mt-2">4,487</h2>
+                <p class="text-xs text-slate-400 mt-1">3,743 (2025) | 744 (2026 YTD)</p>
+            </div>
+
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Resolution Rate</p>
+                <h2 class="text-3xl font-extrabold text-emerald-400 mt-2">88.0%</h2>
+                <p class="text-xs text-emerald-500 mt-1">↑ +0.66% improvement in 2026</p>
+            </div>
+
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Primary Driver Share</p>
+                <h2 class="text-3xl font-extrabold text-amber-400 mt-2">70.8%</h2>
+                <p class="text-xs text-slate-400 mt-1">3,177 cases (Anjing Berkeliaran)</p>
+            </div>
+
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Active Backlog Cases</p>
+                <h2 class="text-3xl font-extrabold text-rose-400 mt-2">371</h2>
+                <p class="text-xs text-rose-400/80 mt-1">104 cases in Klang Utara (Anjing Peliharaan)</p>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Pie Chart: Animal Type Distribution -->
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1">Complaints by Animal Type</h3>
+                    <p class="text-xs text-slate-400 mb-4">Volume breakdown across all recorded incidents</p>
+                </div>
+                <div class="relative h-72 w-full flex items-center justify-center">
+                    <canvas id="animalPieChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Donut Chart: Resolution Status -->
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1">Resolution Status Breakdown</h3>
+                    <p class="text-xs text-slate-400 mb-4">Overall performance status metrics (%)</p>
+                </div>
+                <div class="relative h-72 w-full flex items-center justify-center">
+                    <canvas id="statusDonutChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bar Chart: Regional Split -->
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 lg:col-span-2">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1">Regional Hotspot Distribution</h3>
+                    <p class="text-xs text-slate-400 mb-4">Klang Selatan vs Klang Utara total volume</p>
+                </div>
+                <div class="relative h-60 w-full">
+                    <canvas id="regionBarChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Chart Configuration Script -->
+    <script>
+        // Chart Global Dark Theme Default Settings
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'ui-sans-serif, system-ui, sans-serif';
+
+        // 1. Pie Chart: Animal Type Distribution
+        const animalCtx = document.getElementById('animalPieChart').getContext('2d');
+        new Chart(animalCtx, {
+            type: 'pie',
+            data: {
+                labels: [
+                    'Anjing Berkeliaran (Stray Dogs)',
+                    'Anjing Peliharaan (Pet Dogs)',
+                    'Burung Merpati / Gagak',
+                    'Kucing (Cats)',
+                    'Ternakan Ayam / Itik',
+                    'Ternakan Lembu / Kambing'
+                ],
+                datasets: [{
+                    data: [3177, 631, 266, 242, 92, 76],
+                    backgroundColor: [
+                        '#f59e0b', // Amber
+                        '#38bdf8', // Sky
+                        '#818cf8', // Indigo
+                        '#ec4899', // Pink
+                        '#10b981', // Emerald
+                        '#a855f7'  // Purple
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#1e293b'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, padding: 15 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const value = context.raw;
+                                const percentage = ((value / total) * 100).toFixed(2);
+                                return ` ${context.label}: ${value.toLocaleString()} cases (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Donut Chart: Resolution Status
+        const statusCtx = document.getElementById('statusDonutChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Selesai (Resolved)', 'Tindakan (In Action)', 'Unassigned / Blank', 'Penangguhan (Deferred)', 'Batal (Cancelled)'],
+                datasets: [{
+                    data: [88.0, 7.2, 3.2, 1.1, 0.5],
+                    backgroundColor: [
+                        '#10b981', // Emerald
+                        '#38bdf8', // Sky
+                        '#64748b', // Slate
+                        '#f59e0b', // Amber
+                        '#ef4444'  // Red
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#1e293b'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, padding: 15 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Horizontal Bar Chart: Regional Split
+        const regionCtx = document.getElementById('regionBarChart').getContext('2d');
+        new Chart(regionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Klang Selatan', 'Klang Utara'],
+                datasets: [{
+                    label: 'Total Incident Volume',
+                    data: [2531, 1956],
+                    backgroundColor: ['#0284c7', '#6366f1'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = 4487;
+                                const value = context.raw;
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return ` Cases: ${value.toLocaleString()} (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#f8fafc', font: { weight: 'bold' } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
